@@ -34,18 +34,35 @@ if (typewriter) {
 // Project category filters support multiple tags per project.
 const filterButtons = document.querySelectorAll(".filter-btn");
 const projectCards = document.querySelectorAll(".project-card");
-filterButtons.forEach(button => button.addEventListener("click", () => {
-  const filter = button.dataset.filter;
-  filterButtons.forEach(item => {
-    const active = item === button;
-    item.classList.toggle("active", active);
-    item.setAttribute("aria-pressed", String(active));
-  });
-  projectCards.forEach(card => {
-    const tags = (card.dataset.tags || "").split(" ");
-    card.hidden = filter !== "All" && !tags.includes(filter);
-  });
-}));
+
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const selectedFilter = button.dataset.filter;
+
+        // Update active button
+        filterButtons.forEach(btn => {
+            btn.classList.remove("active");
+            btn.setAttribute("aria-pressed", "false");
+        });
+
+        button.classList.add("active");
+        button.setAttribute("aria-pressed", "true");
+
+        // Filter projects
+        projectCards.forEach(card => {
+            const tags = card.dataset.tags || "";
+
+            if (
+                selectedFilter === "All" ||
+                tags.includes(selectedFilter)
+            ) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+});
 
 // Accessible image preview modal.
 const modal = document.getElementById("imageModal");
