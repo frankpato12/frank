@@ -31,14 +31,13 @@ if (typewriter) {
   window.setTimeout(typeRole, 1700);
 }
 
-// Project category filters support multiple tags per project.
-// Project category filters support multiple tags per project.
+// Project category filters supporting multi-word tags or spaces
 const filterButtons = document.querySelectorAll(".filter-btn");
 const projectCards = document.querySelectorAll(".project-card");
 
 filterButtons.forEach(button => {
   button.addEventListener("click", () => {
-    const selectedFilter = button.dataset.filter.trim();
+    const selectedFilter = button.dataset.filter.trim().toLowerCase();
 
     filterButtons.forEach(btn => {
       btn.classList.remove("active");
@@ -49,16 +48,21 @@ filterButtons.forEach(button => {
     button.setAttribute("aria-pressed", "true");
 
     projectCards.forEach(card => {
-      const tags = (card.dataset.tags || "")
-        .split(/\s+/)
-        .filter(Boolean);
+      // Get data-tags, lowercase them, and check if the selected filter matches any tag
+      const rawTags = card.dataset.tags || "";
+      // Split by spaces, but handle compound tags or check inclusion directly
+      const tags = rawTags.toLowerCase().split(/\s+/);
+      
+      // Special check if filter has a hyphen vs space (e.g., "power-bi" vs "power bi")
+      const matches = rawTags.toLowerCase().includes(selectedFilter.replace("-", " "));
 
       card.hidden =
-        selectedFilter !== "All" &&
-        !tags.includes(selectedFilter);
+        selectedFilter !== "all" &&
+        !matches;
     });
   });
 });
+
 
 // Accessible image preview modal.
 const modal = document.getElementById("imageModal");
