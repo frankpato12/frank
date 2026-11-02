@@ -9,7 +9,7 @@
   <link rel="icon" href="images/onyeneke-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="home-page">
@@ -39,21 +39,80 @@
       </div>
       <div class="hero-visual">
         <div class="visual-glow"></div>
-        <div class="analytics-window">
-          <div class="window-top"><div class="window-dots"><i></i><i></i><i></i></div><span>ANALYTICS SNAPSHOT</span><span class="window-status"><i></i> DEMO VIEW</span></div>
-          <div class="dashboard-title"><div><small>BUSINESS INTELLIGENCE</small><h3>Performance overview</h3></div><span class="period">Illustrative data</span></div>
-          <div class="metric-grid">
-            <div class="metric"><span>Total revenue</span><strong>₦24.8M</strong><em>+12.8%</em></div>
-            <div class="metric"><span>Customers</span><strong>8,420</strong><em>+8.4%</em></div>
-            <div class="metric"><span>Conversion</span><strong>6.42%</strong><em>+2.1%</em></div>
+        
+        <!-- Live Financial Market Analytics Window -->
+        <div class="analytics-window" id="liveMarketWindow">
+          <div class="window-top">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <span class="window-category">LIVE FOREX &amp; MARKET TERMINAL</span>
+            <span class="window-status live-status-badge" id="marketApiStatus">
+              <i class="status-pulse"></i> <span id="statusText">CONNECTING...</span>
+            </span>
           </div>
-          <div class="chart-panel"><div class="chart-heading"><div><small>REVENUE TREND</small><strong>Monthly performance</strong></div><span>Jan — Dec</span></div>
-            <div class="chart-area"><div class="chart-y"><span>30M</span><span>20M</span><span>10M</span><span>0</span></div><div class="chart-bars" aria-label="Illustrative monthly revenue chart">
-              <i style="--h:32%"></i><i style="--h:45%"></i><i style="--h:39%"></i><i style="--h:57%"></i><i style="--h:50%"></i><i style="--h:68%"></i><i style="--h:62%"></i><i style="--h:78%"></i><i style="--h:72%"></i><i style="--h:88%"></i><i style="--h:82%"></i><i style="--h:96%"></i>
-            </div></div><div class="chart-months"><span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Dec</span></div>
+
+          <div class="dashboard-title market-title-bar">
+            <div>
+              <div class="pair-selector-wrap">
+                <select id="currencyPairSelect" class="market-select" aria-label="Select Currency Pair">
+                  <option value="EURUSD" selected>EUR / USD — Euro</option>
+                  <option value="GBPUSD">GBP / USD — British Pound</option>
+                  <option value="USDJPY">USD / JPY — Japanese Yen</option>
+                  <option value="BTCUSD">BTC / USD — Bitcoin</option>
+                </select>
+              </div>
+              <h3 id="pairDisplayTitle">EUR / USD Market Feed</h3>
+            </div>
+            <div class="timeframe-picker" role="toolbar" aria-label="Chart Timeframe">
+              <button class="tf-btn" data-tf="1M">1M</button>
+              <button class="tf-btn active" data-tf="5M">5M</button>
+              <button class="tf-btn" data-tf="15M">15M</button>
+              <button class="tf-btn" data-tf="1H">1H</button>
+              <button class="tf-btn" data-tf="4H">4H</button>
+              <button class="tf-btn" data-tf="1D">1D</button>
+            </div>
           </div>
-          <div class="window-footer"><span><i></i> Sample dashboard concept</span><span>Excel · SQL · Power BI</span></div>
+
+          <!-- Real-Time Price Metrics Grid -->
+          <div class="metric-grid market-metrics-grid">
+            <div class="metric">
+              <span>SPOT PRICE</span>
+              <strong id="liveSpotPrice">1.08420</strong>
+              <em id="livePriceChange" class="badge-up">+0.00045 (+0.04%)</em>
+            </div>
+            <div class="metric">
+              <span>24H HIGH / LOW</span>
+              <strong id="liveHighLow">1.08850 / 1.08110</strong>
+              <em class="neutral-meta" id="spreadMeta">Spread: 0.8 pips</em>
+            </div>
+            <div class="metric">
+              <span>OPEN / VOL</span>
+              <strong id="liveOpenVol">1.08375</strong>
+              <em class="neutral-meta" id="lastTickTime">Tick: --:--:--</em>
+            </div>
+          </div>
+
+          <!-- Interactive Chart Engine Panel -->
+          <div class="chart-panel market-chart-container">
+            <div class="chart-controls-sub">
+              <div class="chart-type-toggle">
+                <button id="btnChartCandle" class="chart-mode-btn active" title="Candlestick Chart">🕯️ Candles</button>
+                <button id="btnChartLine" class="chart-mode-btn" title="Line Chart">📈 Line</button>
+              </div>
+              <span id="chartRangeIndicator" class="chart-sub-label">Real-Time Tick Stream</span>
+            </div>
+
+            <div class="canvas-wrapper">
+              <canvas id="marketChartCanvas" width="520" height="190"></canvas>
+              <div id="chartTooltip" class="chart-tooltip" hidden></div>
+            </div>
+          </div>
+
+          <div class="window-footer">
+            <span><i class="status-pulse green"></i> Real-time Exchange Rate Stream</span>
+            <span>Excel · SQL · Power BI · Financial Analytics</span>
+          </div>
         </div>
+
         <div class="floating-note"><span class="note-icon">✦</span><div><strong>Data to insight</strong><small>Clarity through analysis</small></div></div>
       </div>
     </div>
@@ -71,4 +130,5 @@
 </main>
 <footer><div class="container footer-inner"><a class="brand" href="index.html">Onyeneke<span class="accent">.</span></a><span>© 2026 Frank Chigemezu Onyeneke. All rights reserved.</span><a href="#top">Back to top ↑</a></div></footer>
 <script src="script.js"></script>
-</body></html>
+</body>
+</html>
